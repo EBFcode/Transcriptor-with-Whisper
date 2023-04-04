@@ -1,77 +1,67 @@
-let apiKey = null;
-transcribeButton.disabled = true;
-audioFileInput.disabled = true;
-
-
-const ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
 const audioFileInput = document.getElementById("audioFile");
 const transcribeButton = document.getElementById("transcribeButton");
 const transcriptText = document.getElementById("transcriptText");
 const saveButton = document.getElementById("saveButton");
-
 const apiForm = document.getElementById("apiForm");
 
+let apiKey;
+
+// Guardar y cargar API Key desde el almacenamiento local
 apiForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    apiKey = document.getElementById("apiKey").value;
-    
-    if (apiKey) {
-        transcribeButton.disabled = false;
-        audioFileInput.disabled = false;
-    } else {
-        transcribeButton.disabled = true;
-        audioFileInput.disabled = true;
-    }
-});
+event.preventDefault();
+apiKey = document.getElementById("apiKey").value;
 
-
-audioFileInput.addEventListener("change", () => {
-if (audioFileInput.files.length > 0) {
+if (apiKey) {
+    localStorage.setItem("whisper_api_key", apiKey);
     transcribeButton.disabled = false;
+    audioFileInput.disabled = false;
 } else {
     transcribeButton.disabled = true;
+    audioFileInput.disabled = true;
 }
 });
 
-transcribeButton.addEventListener("click", async () => {
-transcriptText.value = "Transcribiendo, por favor espera...";
-transcribeButton.disabled = true;
-saveButton.disabled = true;
+document.addEventListener("DOMContentLoaded", () => {
+const storedApiKey = localStorage.getItem("whisper_api_key");
+if (storedApiKey) {
+    document.getElementById("apiKey").value = storedApiKey;
+    apiKey = storedApiKey;
+    transcribeButton.disabled = false;
+    audioFileInput.disabled = false;
+}
+});
 
-try {
+// Transcribir el archivo de audio
+transcribeButton.addEventListener("click", async () => {
+    transcriptText.value = "Transcribiendo, por favor espera...";
+    transcribeButton.disabled = true;
+    saveButton.disabled = true;
+
+    try {
     const formData = new FormData();
     formData.append("file", audioFileInput.files[0]);
     formData.append("model", "whisper-1");
 
-    const response = await axios.post(ENDPOINT, formData, {
-    headers: {
-        "Authorization": `Bearer ${API_KEY}`,
-        "Content-Type": "multipart/form-data",},
+    const response = await axios.post("https://api.openai.com/v1/audio/transcriptions", formData, {
+        headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "multipart/form-data",
+        },
     });
 
-    if (response.status === 200) {
-        transcriptText.value = response.data.text;
-        } else {
-        transcriptText.value = `Error al transcribir el archivo de audio. Código de estado: ${response.status}\n\nRespuesta: ${response.statusText}`;
-        }
+    transcriptText.value = response.data.text;
     } catch (error) {
-        transcriptText.value = `Error al transcribir el archivo de audio. Error: ${error.message}`;
-    } finally {
-        transcribeButton.disabled = false;
-        saveButton.disabled = false;
+    console.error("Error al transcribir el archivo de audio:", error);
+    transcriptText.value = "Error al transcribir el archivo de audio.";
     }
-    });
 
+    transcribeButton.disabled = false;
+    saveButton.disabled = false;
+});
+
+// Guardar la transcripción en un archivo de texto
 saveButton.addEventListener("click", () => {
-    const textToSave = transcriptText.value;
-    const blob = new Blob([textToSave], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "transcripcion.txt";
-    link.click();
-
-    URL.revokeObjectURL(url);
+    const blob = new Blob([transcriptText.value], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, "transcriptorAI.txt");
 });
 

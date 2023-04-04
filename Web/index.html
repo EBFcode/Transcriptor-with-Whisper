@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transcriptor de audio con Whisper</title>
+    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
 </head>
 <body>
     <div class="container">
@@ -15,14 +18,14 @@
         <form id="apiForm">
             <label for="apiKey">Ingresa tu clave API de OpenAI:</label>
             <!-- Si el usario no sabe como hacerlo -->
-            <a href="https://openai.com/docs/developer-quickstart/api-key" target="_blank">¿Cómo obtener una clave API?</a>
+            <a href="https://openai.com/blog/openai-api" target="_blank">¿Cómo obtener una clave API?</a>
             <input type="password" id="apiKey" required>
             <button type="submit">Establecer clave API</button>
         </form>
         
 
         <label for="audioFile">Selecciona un archivo de audio (.mp3 o .m4a)</label>
-        <input type="file" id="audioFile" accept="audio/mp3,audio/m4a">
+        <input type="file" id="audioFile" accept="audio/mp3,audio/x-m4a">
         <button id="transcribeButton" disabled>Transcribir</button>
         <textarea id="transcriptText" readonly></textarea>
         <button id="saveButton" disabled>Guardar transcripción</button>
