@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcriptor de audio con Whisper</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Transcriptor de audio con Whisper</h1>
+        <h3>By Jhony Robles</h3>
+        <p>Este ejemplo muestra cómo usar la API de Whisper para transcribir audio.</p>
+
+        <form id="apiForm">
+            <label for="apiKey">Ingresa tu clave API de OpenAI:</label>
+            <!-- Si el usario no sabe como hacerlo -->
+            <a href="https://openai.com/docs/developer-quickstart/api-key" target="_blank">¿Cómo obtener una clave API?</a>
+            <input type="text" id="apiKey" required>
+            <button type="submit">Establecer clave API</button>
+        </form>
+        
+
+        <label for="audioFile">Selecciona un archivo de audio (.mp3 o .m4a)</label>
+        <input type="file" id="audioFile" accept="audio/mp3,audio/m4a">
+        <button id="transcribeButton" disabled>Transcribir</button>
+        <textarea id="transcriptText" readonly></textarea>
+        <button id="saveButton" disabled>Guardar transcripción</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
