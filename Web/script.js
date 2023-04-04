@@ -8,18 +8,44 @@ let apiKey;
 
 // Guardar y cargar API Key desde el almacenamiento local
 apiForm.addEventListener("submit", (event) => {
-event.preventDefault();
-apiKey = document.getElementById("apiKey").value;
+    event.preventDefault();
+    apiKey = document.getElementById("apiKey").value;
 
-if (apiKey) {
-    localStorage.setItem("whisper_api_key", apiKey);
-    transcribeButton.disabled = false;
-    audioFileInput.disabled = false;
-} else {
-    transcribeButton.disabled = true;
-    audioFileInput.disabled = true;
-}
+    if (apiKey) {
+        // Almacenar la clave API junto con un timestamp
+        const storedApiKeyData = {
+            key: apiKey,
+            timestamp: Date.now(),
+        };
+        localStorage.setItem("whisper_api_key", JSON.stringify(storedApiKeyData));
+        transcribeButton.disabled = false;
+        audioFileInput.disabled = false;
+    } else {
+        transcribeButton.disabled = true;
+        audioFileInput.disabled = true;
+    }
 });
+
+// Cargar la clave API si está disponible
+document.addEventListener("DOMContentLoaded", () => {
+    const storedApiKeyData = JSON.parse(localStorage.getItem("whisper_api_key"));
+    if (storedApiKeyData) {
+        const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+        const currentTime = Date.now();
+
+        if (currentTime - storedApiKeyData.timestamp <= twoDaysInMilliseconds) {
+            document.getElementById("apiKey").value = storedApiKeyData.key;
+            apiKey = storedApiKeyData.key;
+            transcribeButton.disabled = false;
+            audioFileInput.disabled = false;
+        }         } else {
+            // Eliminar la clave API si han pasado más de 2 días
+            localStorage.removeItem("whisper_api_key");
+        }
+    }
+);
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
 const storedApiKey = localStorage.getItem("whisper_api_key");
