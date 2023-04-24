@@ -4,33 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transcriptor de audio con Whisper</title>
+
+    <!-- Normalize -->
+    <link rel="stylesheet" href="/assets/css/normalize.css">
+
+    <!-- Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap Grid -->
+    <link rel="stylesheet" href="/assets/css/bootstrap-grid.min.css">
+
+    
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- FileSaver -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
 </head>
 <body>
-    <div class="container">
-        <h1>Transcriptor de audio con Whisper</h1>
-        <h3>By Jhony Robles</h3>
-        <p>Este ejemplo muestra cómo usar la API de Whisper para transcribir audio.</p>
+    <div class="container-fluid g-0">
+        <div class="row">
 
-        <form id="apiForm">
-            <label for="apiKey">Ingresa tu clave API de OpenAI:</label>
-            <!-- Si el usario no sabe como hacerlo -->
-            <a href="https://openai.com/blog/openai-api" target="_blank">¿Cómo obtener una clave API?</a>
-            <input type="password" id="apiKey" required>
-            <button type="submit">Establecer clave API</button>
-        </form>
+            <div class="col-3">
+                <div class="menu-sidebar">
+                    <div class="menu-user">
+                        <div class="header-user d-flex 
+                        justify-content-between align-items-center">
+                            <h4 id="sign-api">Ingresa tu clave API de OpenAI:</h4>
+                            <button class="btn btn-small the-light" id="btn-api"><i class="fa-sharp fa-solid fa-bolt"></i></button>
+                        </div>
+                        
+
+                        <form class="hidden" id="apiForm">
+                            <!-- Si el usario no sabe como hacerlo -->
+                            <p>
+                                <a href="https://openai.com/blog/openai-api" rel="noopener" target="_blank">¿Cómo obtener una clave API?</a>
+                            </p>
+                            <input type="password" id="apiKey" required>
+                            <button class="btn" type="submit">Establecer clave API</button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="col-9">
+                <h1>Transcriptor de audio con Whisper</h1>
+                <h3>By Jhony Robles</h3> 
+
+                
+                
+
+                <label for="audioFile">Selecciona un archivo de audio (.mp3 o .m4a)</label>
+                
+                <input type="file" id="audioFile" accept="audio/mp3,audio/x-m4a" style="display:none">
+                <!-- Añadir un botón personalizado y un span para mostrar el nombre del archivo -->
+                <button class="btn-off" id="customUploadButton" type="button">Seleccionar archivo de audio</button>
+                <span id="fileNameDisplay">Ningún archivo seleccionado</span>
+
+                <button class="btn-off" id="transcribeButton" disabled><i class="fa-sharp fa-solid fa-cloud-arrow-up"></i> Transcribir</button>
+                <label >
+                    <textarea id="transcriptText" readonly></textarea>
+                    <button class="btn-off" id="saveButton" disabled><i class="fa-sharp fa-solid fa-cloud-arrow-down"></i> Guardar transcripción</button>
+                </label>
+            </div>
+        </div>
         
-
-        <label for="audioFile">Selecciona un archivo de audio (.mp3 o .m4a)</label>
-        <input type="file" id="audioFile" accept="audio/mp3,audio/x-m4a">
-        <button id="transcribeButton" disabled>Transcribir</button>
-        <textarea id="transcriptText" readonly></textarea>
-        <button id="saveButton" disabled>Guardar transcripción</button>
+        
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="script.js"></script>
+    <script src="/assets/js/script.js"></script>
 </body>
 </html>
